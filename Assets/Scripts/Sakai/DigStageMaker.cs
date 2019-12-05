@@ -7,7 +7,7 @@ public class DigStageMaker : MonoBehaviour
     //ブロックのプレハブ
     [SerializeField] private GameObject digBlock;
     //ブロックを生成するパネル
-    [SerializeField] private GameObject basePanel;
+    private GameObject basePanel;
     //幅、横の数
     [SerializeField] private int width;
     //高さ、縦の数
@@ -17,6 +17,8 @@ public class DigStageMaker : MonoBehaviour
 
     void Start()
     {
+        basePanel = GameObject.Find("BasePanel");
+        blockParent = GameObject.Find("BlockParent");
         MakeStage(digBlock, width, height, blockParent);
     }
 
@@ -34,22 +36,22 @@ public class DigStageMaker : MonoBehaviour
         float blockHeight = panelRect.rect.height / h;
 
         RectTransform parentRect = parent.GetComponent<RectTransform>();
-        parentRect.position = new Vector2(blockwidth / 2, parentRect.rect.height - (blockHeight / 2));
+        parentRect.position = new Vector2(blockwidth / 2, panelRect.rect.height - (blockHeight / 2));
 
         for(int i = 0; i < h; i++)
         {
             for(int j = 0; j < w; j++)
             {
-                GameObject b = GameObject.Instantiate(block, parentRect, false);
+                GameObject b = Instantiate(block, parentRect, false);
                 RectTransform rect = b.GetComponent<RectTransform>();
                 rect.SetParent(parentRect);
-                rect.sizeDelta = Vector2.one;
+                rect.localScale = Vector2.one;
+                rect.sizeDelta = new Vector2(blockwidth, blockHeight);
                 b.SetActive(true);
-                rect.localPosition = new Vector2( blockwidth * w, blockHeight * h);
+                rect.localPosition = new Vector2( blockwidth * j, -blockHeight * i);
+                b.GetComponent<DigBlock>().StartSetting();
             }
         }
-
-
     }
 
 

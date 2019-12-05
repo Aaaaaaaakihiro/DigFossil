@@ -12,15 +12,25 @@ public class DigBlock : MonoBehaviour
     [SerializeField] private Sprite[] blockStatusSprites;
     //ブロックの画像を入れるRawImage
     private Image blockImage;
+    private DigToolBase digTool;
+
 
     void Start()
     {
-        SetSprite();
+        
     }
 
     void Update()
     {
         
+    }
+
+    public void StartSetting()
+    {
+        digTool = GameObject.Find("DigTool").GetComponent<DigToolBase>();
+        blockHealth = 3;
+        SetSprite();
+        GetComponent<Button>().onClick.AddListener(() => { Dig(0); });
     }
 
     /// <summary>
@@ -37,7 +47,16 @@ public class DigBlock : MonoBehaviour
     /// </summary>
     private void SetSprite()
     {
-        blockImage.sprite = blockStatusSprites[blockHealth];
+        if (blockImage == null)
+            blockImage = GetComponent<Image>();
+
+        if(blockStatusSprites != null && blockStatusSprites.Length != 0)
+            blockImage.sprite = blockStatusSprites[blockHealth];
+        else
+        {
+            Color[] colors = { Color.red, Color.yellow, Color.green };
+            blockImage.color = colors[blockHealth - 1];
+        }
     }
 
     /// <summary>
@@ -45,11 +64,12 @@ public class DigBlock : MonoBehaviour
     /// 耐久値が０になったら非表示にする
     /// </summary>
     /// <param name="power">ハンマーなどの掘る道具のパワー</param>
-    public void Dig(int power)
+    protected virtual void Dig(int power)
     {
-        blockHealth -= power;
-        SetSprite();
+        blockHealth -= digTool.power;
         if (CheckState())
             gameObject.SetActive(false);
+        else
+            SetSprite();
     }
 }

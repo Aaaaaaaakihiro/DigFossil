@@ -1,37 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DigToolBase : MonoBehaviour
 {
     //道具のパワー
-    [SerializeField] protected int power;
+    //[SerializeField] protected int power;
+    public int power;
     //レイヤーマスク
-    protected int layerMask;
+    [SerializeField] protected LayerMask targetLayer;
 
     
 
     protected void Start()
     {
-        layerMask = LayerMask.NameToLayer("DigBlock");
+
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            Dig();
-        }
+
     }
 
+    //掘る作業のヴァーチャルメソッド
+    //現状はボタンで実装しているので、これは不要
     protected virtual void Dig()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, 100, layerMask))
-        {
-            DigBlock block = hit.collider.gameObject.GetComponent<DigBlock>();
-            block.Dig(power);
-        }
+
     }
 }
