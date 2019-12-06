@@ -30,7 +30,7 @@ public class DigBlock : MonoBehaviour
         digTool = GameObject.Find("DigTool").GetComponent<DigToolBase>();
         blockHealth = 3;
         SetSprite();
-        GetComponent<Button>().onClick.AddListener(() => { Dig(0); });
+        GetComponent<Button>().onClick.AddListener(() => { Dig(digTool.GetPower()); });
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class DigBlock : MonoBehaviour
     /// <param name="power">ハンマーなどの掘る道具のパワー</param>
     protected virtual void Dig(int power)
     {
-        blockHealth -= digTool.power;
+        blockHealth -= power;
         if (CheckState())
             gameObject.SetActive(false);
         else
