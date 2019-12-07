@@ -9,16 +9,17 @@ public enum DigToolChoice
     Pikkeru
 }
 
-public class DigToolBase : MonoBehaviour
+public class DigTool : MonoBehaviour
 {
     //道具のパワー
-    //[SerializeField] protected int power;
     [SerializeField] private int[] power;
     //レイヤーマスク
-    [SerializeField] protected LayerMask targetLayer;
-    [HideInInspector] public DigToolChoice toolChoice;
+    [SerializeField] 
+    private LayerMask targetLayer;
     private DigStageMaker stageMaker;
-    [SerializeField] private Button[] toolButtons;
+    private DigToolChoice toolChoice;
+    [SerializeField] 
+    private Button[] digToolButtons;
     
 
     protected void Start()
@@ -36,8 +37,10 @@ public class DigToolBase : MonoBehaviour
     public void ChangeTool(int choice)
     {
         toolChoice = (DigToolChoice)choice;
-        toolButtons[choice].enabled = false;
-        toolButtons[1 - choice].enabled = true;
+        for(int i = 0; i < digToolButtons.Length; i++)
+        {
+            digToolButtons[i].interactable = (i == choice) ? false : true;
+        }
     }
 
     //掘る威力を返すメソッド

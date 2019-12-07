@@ -12,7 +12,7 @@ public class DigBlock : MonoBehaviour
     [SerializeField] private Sprite[] blockStatusSprites;
     //ブロックの画像を入れるRawImage
     private Image blockImage;
-    private DigToolBase digTool;
+    private DigTool digTool;
 
 
     void Start()
@@ -27,7 +27,7 @@ public class DigBlock : MonoBehaviour
 
     public void StartSetting()
     {
-        digTool = GameObject.Find("DigTool").GetComponent<DigToolBase>();
+        digTool = GameObject.Find("DigTool").GetComponent<DigTool>();
         blockHealth = 3;
         SetSprite();
         GetComponent<Button>().onClick.AddListener(() => { Dig(digTool.GetPower()); });
