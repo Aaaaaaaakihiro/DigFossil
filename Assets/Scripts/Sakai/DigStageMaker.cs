@@ -19,7 +19,7 @@ public class DigStageMaker : MonoBehaviour
     //private DigBlock[,] digBlocks;
     private bool[,] digBlockExist;
     //アイテムが存在するかどうかを管理する配列
-    private bool[,] itemExist;
+    //private bool[,] itemExist;
     //アイテム生成の親　位置的にはブロック生成の親と同じ
     private GameObject itemParent;
     //ステージの耐久値
@@ -66,7 +66,7 @@ public class DigStageMaker : MonoBehaviour
 
 
         digBlockExist = new bool[h, w];
-        itemExist = new bool[h, w];
+        //itemExist = new bool[h, w];
 
         for(int i = 0; i < h; i++)
         {
@@ -110,37 +110,61 @@ public class DigStageMaker : MonoBehaviour
 
         Debug.Log("SpawnX : " + spawnX);
         Debug.Log("SpawnY : " + spawnY);
-        Debug.Log("BlockWidth : " + blockWidth);
-        Debug.Log("BlockHeight : " + blockHeight);
+        //Debug.Log("BlockWidth : " + blockWidth);
+        //Debug.Log("BlockHeight : " + blockHeight);
 
         //ここから実際の生成処理
 
         //まずはアイテムのインデックスに情報を登録
-        for(int i = spawnY; i < spawnY + item.height; i++)
-        {
-            for(int j = spawnX; j < spawnX + item.width; j++)
-            {
-                itemExist[j, i] = true;
-            }
-        }
+        //for(int i = 0; i < item.height; i++)
+        //{
+        //    for(int j = 0; j < item.width; j++)
+        //    {
+        //        item.AddItemIndex(spawnX +  j,spawnY + i);
+        //    }
+        //}
+
+
+        //for(int i = spawnY; i < spawnY + item.height; i++)
+        //{
+        //    for(int j = spawnX; j < spawnX + item.width; j++)
+        //    {
+        //        //itemExist[i, j] = true;
+        //        item.AddItemIndex(j, i);
+        //    }
+        //}
 
         //次に生成する座標を算出
         float centerIndexX = (spawnX + spawnX + item.width) / 2;
         float centerIndexY = (spawnY + spawnY + item.height) / 2;
 
         GameObject it = Instantiate(item.gameObject, itemParentRect, false);
+        DigItem dig = it.GetComponent<DigItem>();
+        for (int i = 0; i < item.height; i++)
+        {
+            for (int j = 0; j < item.width; j++)
+            {
+                dig.AddItemIndex(spawnX + j, spawnY + i);
+            }
+        }
         RectTransform itemRect = it.GetComponent<RectTransform>();
         itemRect.SetParent(itemParentRect);
         itemRect.localScale = Vector3.one;
         itemRect.sizeDelta = new Vector2(blockWidth * item.width, blockHeight * item.height);
         it.SetActive(true);
-        itemRect.localPosition = new Vector2(blockWidth * centerIndexX, blockHeight * centerIndexY);
+        itemRect.localPosition = new Vector2(blockWidth * centerIndexX - (blockWidth / 2), blockHeight * -centerIndexY + (blockHeight / 2));
     }
 
 
     public void DestroyBlock(int x, int y)
     {
-        digBlockExist[x, y] = false;
+        digBlockExist[y, x] = false;
+        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+        for (int i = 0; i < items.Length; i++)
+        {
+            DigItem item = items[i].GetComponent<DigItem>();
+            item.CheckIsFound(x, y);
+        }
     }
 
     public void DamageStage(int damage)
