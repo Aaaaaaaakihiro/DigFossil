@@ -7,7 +7,7 @@ public class DigItem : MonoBehaviour
     public int width;
     public int height;
     [SerializeField] private List<Vector2> itemIndexes;
-    
+    [HideInInspector] public int point{get; private set;}
 
     void Start()
     {
@@ -34,9 +34,14 @@ public class DigItem : MonoBehaviour
         }
         if(isBroken && itemIndexes.Count == 0)
         {
-            Debug.Log("アイテムを発見");
+            OnFound();
         }
         
+    }
+    
+    privave void OnFound()
+    {
+        Debug.Log("アイテムを発見");
     }
 
     public void AddItemIndex(int x, int y)
