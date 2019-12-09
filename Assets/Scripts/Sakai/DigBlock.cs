@@ -13,6 +13,8 @@ public class DigBlock : MonoBehaviour
     //ブロックの画像を入れるRawImage
     private Image blockImage;
     private DigTool digTool;
+    private DigStageMaker digStageMaker;
+    private int pos_x, pos_y;
 
 
     void Start()
@@ -25,12 +27,15 @@ public class DigBlock : MonoBehaviour
         
     }
 
-    public void StartSetting()
+    public void StartSetting(int x, int y)
     {
         digTool = GameObject.Find("DigTool").GetComponent<DigTool>();
         blockHealth = 3;
         SetSprite();
         GetComponent<Button>().onClick.AddListener(() => { Dig(digTool.GetPower()); });
+        digStageMaker = GameObject.Find("BasePanel").GetComponent<DigStageMaker>();
+        pos_x = x;
+        pos_y = y;
     }
 
     /// <summary>
@@ -68,7 +73,10 @@ public class DigBlock : MonoBehaviour
     {
         blockHealth -= power;
         if (CheckState())
+        {
             gameObject.SetActive(false);
+            digStageMaker.DestroyBlock(pos_x, pos_y);
+        }
         else
             SetSprite();
     }

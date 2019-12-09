@@ -20,6 +20,8 @@ public class DigStageMaker : MonoBehaviour
     private bool[,] digBlockExist;
     //アイテムが存在するかどうかを管理する配列
     private bool[,] itemExist;
+    //アイテム生成の親　位置的にはブロック生成の親と同じ
+    private GameObject itemParent;
     //ステージの耐久値
     [SerializeField] private int stageHealth;
     //ステージの耐久値を表示するスライダー
@@ -28,15 +30,17 @@ public class DigStageMaker : MonoBehaviour
     private float blockWidth;
     //ブロックの縦幅
     private float blockHeight;
+    [SerializeField] private GameObject greenRockItem;
 
     void Start()
     {
         basePanel = GameObject.Find("BasePanel");
         blockParent = GameObject.Find("BlockParent");
+        itemParent = GameObject.Find("ItemParent");
         healthGage = GameObject.Find("HealthGage").GetComponent<Slider>();
         healthGage.maxValue = stageHealth;
         healthGage.value = stageHealth;
-        MakeStage(digBlock, width, height, blockParent);
+        MakeStage(digBlock, width, height, blockParent, itemParent);
     }
 
     /// <summary>
@@ -46,14 +50,20 @@ public class DigStageMaker : MonoBehaviour
     /// <param name="w">幅、横の数</param>
     /// <param name="h">高さ、縦の数</param>
     /// <param name="parent">生成するときの起点となる親</param>
-    private void MakeStage(GameObject block, int w, int h, GameObject parent)
+    private void MakeStage(GameObject block, int w, int h, GameObject parent, GameObject itemParent)
     {
         RectTransform panelRect = basePanel.GetComponent<RectTransform>();
         blockWidth = panelRect.rect.width / w;
         blockHeight = panelRect.rect.height / h;
 
+        //ブロック生成の親の位置を調整
         RectTransform parentRect = parent.GetComponent<RectTransform>();
         parentRect.position = new Vector2(blockWidth / 2, panelRect.rect.height - (blockHeight / 2));
+
+        //アイテム生成の親の位置を調整
+        RectTransform itemParentRect = itemParent.GetComponent<RectTransform>();
+        itemParentRect.position = new Vector2(blockWidth / 2, panelRect.rect.height - (blockHeight / 2));
+
 
         digBlockExist = new bool[h, w];
         itemExist = new bool[h, w];
@@ -69,11 +79,16 @@ public class DigStageMaker : MonoBehaviour
                 rect.sizeDelta = new Vector2(blockWidth, blockHeight);
                 b.SetActive(true);
                 rect.localPosition = new Vector2( blockWidth * j, -blockHeight * i);
-                b.GetComponent<DigBlock>().StartSetting();
-                //digBlocks[i, j] = b.GetComponent<DigBlock>();
+                b.GetComponent<DigBlock>().StartSetting(j,i);
                 digBlockExist[i, j] = true;
             }
         }
+        SetItemOnRandomPoint(greenRockItem.GetComponent<DigItem>(),
+            width, 
+            height, 
+            blockWidth,
+            blockHeight,
+            itemParent.GetComponent<RectTransform>());
     }
 
 
@@ -83,30 +98,49 @@ public class DigStageMaker : MonoBehaviour
         
     }
 
-    private void SetItemOnRandomPoint(DigItem item, int stageWidth, int stageHeight, int blockWidth, int blockHeight)
+    private void SetItemOnRandomPoint(DigItem item, int stageWidth, int stageHeight, float blockWidth, float blockHeight, RectTransform itemParentRect)
     {
         //はみ出したりすることがないように限界を算出する
         int bottomRightX = stageWidth - item.width;
         int bottomRightY = stageHeight - item.height;
 
         //限定した範囲内でランダムな地点を決める
-        int spawnX = Random.Range(0, bottomRightX + 1);
-        int spawnY = Random.Range(0, bottomRightY + 1);
+        int spawnX = Random.Range(0, bottomRightX);
+        int spawnY = Random.Range(0, bottomRightY);
+
+        Debug.Log("SpawnX : " + spawnX);
+        Debug.Log("SpawnY : " + spawnY);
+        Debug.Log("BlockWidth : " + blockWidth);
+        Debug.Log("BlockHeight : " + blockHeight);
 
         //ここから実際の生成処理
 
         //まずはアイテムのインデックスに情報を登録
-        for(int i = spawnY; i < spawnY + blockHeight; i++)
+        for(int i = spawnY; i < spawnY + item.height; i++)
         {
-            for(int j = spawnX; j < spawnX + blockWidth; j++)
+            for(int j = spawnX; j < spawnX + item.width; j++)
             {
                 itemExist[j, i] = true;
             }
         }
 
+        //次に生成する座標を算出
+        float centerIndexX = (spawnX + spawnX + item.width) / 2;
+        float centerIndexY = (spawnY + spawnY + item.height) / 2;
+
+        GameObject it = Instantiate(item.gameObject, itemParentRect, false);
+        RectTransform itemRect = it.GetComponent<RectTransform>();
+        itemRect.SetParent(itemParentRect);
+        itemRect.localScale = Vector3.one;
+        itemRect.sizeDelta = new Vector2(blockWidth * item.width, blockHeight * item.height);
+        it.SetActive(true);
+        itemRect.localPosition = new Vector2(blockWidth * centerIndexX, blockHeight * centerIndexY);
+    }
 
 
-
+    public void DestroyBlock(int x, int y)
+    {
+        digBlockExist[x, y] = false;
     }
 
     public void DamageStage(int damage)
