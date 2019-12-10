@@ -121,11 +121,11 @@ public class DigStageMaker : MonoBehaviour
 
         //ほかのアイテムと被っていないかチェック
         //仮にかぶっていたら強制的に終了（何も生成しない）
-        for (int i = 0; i < item.height; i++)
+        for (int i = 0; i < item.height ; i++)
         {
-            for (int j = 0; j < item.width; j++)
+            for (int j = 0; j < item.width ; j++)
             {
-                if (itemExist[spawnX + j, spawnY + i] == true)
+                if (itemExist[spawnY + i, spawnX + j] == true)
                     return;
             }
         }
