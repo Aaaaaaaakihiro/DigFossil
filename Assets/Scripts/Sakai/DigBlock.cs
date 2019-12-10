@@ -27,6 +27,17 @@ public class DigBlock : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// ポインタが重なっているかどうかを判定する
+    /// </summary>
+    /// <param name="pointer">ポインタの座標</param>
+    /// <returns></returns>
+    //private bool IsUnderPointer(Vector2 pointer)
+    //{
+    //    Rect rect = GetComponent<RectTransform>().rect;
+    //    return rect.Contains(pointer);
+    //}
+
     public void StartSetting(int x, int y)
     {
         digTool = GameObject.Find("DigTool").GetComponent<DigTool>();

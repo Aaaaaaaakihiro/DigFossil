@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class DigItem : MonoBehaviour
 {
     public int width;
     public int height;
     [SerializeField] private List<Vector2> itemIndexes;
-    [HideInInspector] public int point{get; private set;}
+    public int point{get; private set;}
+    public string itemName { get; private set; }
 
     void Start()
     {
@@ -19,9 +21,13 @@ public class DigItem : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// 発見したかどうかを判定する
+    /// </summary>
+    /// <param name="x">壊したブロックのXインデックス</param>
+    /// <param name="y">壊したブロックのYインデックス</param>
     public void CheckIsFound(int x, int y)
     {
-        //Debug.Log(itemIndexes);
         bool isBroken = false;
         for(int i = 0; i < itemIndexes.Count; i++)
         {
@@ -39,21 +45,25 @@ public class DigItem : MonoBehaviour
         
     }
     
-    privave void OnFound()
+    /// <summary>
+    /// 発見時の処理を行う
+    /// </summary>
+    private void OnFound()
     {
         Debug.Log("アイテムを発見");
     }
 
+    /// <summary>
+    /// アイテムのフィールド内インデックス情報を保存する
+    /// </summary>
+    /// <param name="x">フィールド内インデックスのX</param>
+    /// <param name="y">フィールド内インデックスのY</param>
     public void AddItemIndex(int x, int y)
     {
         if(itemIndexes == null)
         {
-            Debug.Log("座標情報なし");
             itemIndexes = new List<Vector2>();
-
         }
-        Debug.Log("座標を追加");
         itemIndexes.Add(new Vector2(x, y));
-        Debug.Log(itemIndexes.Count);
     }
 }

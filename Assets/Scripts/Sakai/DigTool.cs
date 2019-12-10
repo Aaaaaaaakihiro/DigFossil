@@ -14,8 +14,8 @@ public class DigTool : MonoBehaviour
     //道具のパワー
     [SerializeField] private int[] power;
     //レイヤーマスク
-    [SerializeField] 
-    private LayerMask targetLayer;
+    //[SerializeField] 
+    //private LayerMask targetLayer;
     private DigStageMaker stageMaker;
     private DigToolChoice toolChoice;
     [SerializeField] 
@@ -34,6 +34,10 @@ public class DigTool : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// ツールの選択を変える
+    /// </summary>
+    /// <param name="choice">選択</param>
     public void ChangeTool(int choice)
     {
         toolChoice = (DigToolChoice)choice;
@@ -43,7 +47,10 @@ public class DigTool : MonoBehaviour
         }
     }
 
-    //掘る威力を返すメソッド
+    /// <summary>
+    /// 威力を返すメソッド
+    /// </summary>
+    /// <returns></returns>
     public virtual int GetPower()
     {
         stageMaker.DamageStage(power[(int)toolChoice]);

@@ -14,10 +14,7 @@ public class DigEventManager : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Return))
-        //{
-        //    CheckIsActive();
-        //}
+
     }
 
     private void SetRandomEventPoint(int count)
@@ -29,13 +26,6 @@ public class DigEventManager : MonoBehaviour
         }
     }
 
-    //private void CheckIsActive()
-    //{
-    //    foreach(DigEvent digEvent in digEvents)
-    //    {
-    //        Debug.Log(digEvent.gameObject.name + " : " + digEvent.gameObject.activeSelf);
-    //    }
-    //}
 
     private DigEvent[] GetDigEventPoints(string tag)
     {
