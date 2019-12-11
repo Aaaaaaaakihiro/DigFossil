@@ -100,6 +100,21 @@ public class DigStageMaker : MonoBehaviour
     {
         
     }
+    
+    private bool IsAbleToSet(int h, int v, DigItem item)
+    {
+		for (int i = 0; i < item.width; i++)
+		{
+			for(int j = 0; j < item.height; j++)
+			{
+				if(itemExist[v + j , h + i])
+					return false;
+			}
+		}
+		return true;
+	}
+    
+    
     /// <summary>
     /// ランダムな位置にアイテムを生成する
     /// </summary>
@@ -114,40 +129,70 @@ public class DigStageMaker : MonoBehaviour
         //はみ出したりすることがないように限界を算出する
         int bottomRightX = stageWidth - item.width;
         int bottomRightY = stageHeight - item.height;
+        
+        //アイテムの形に応じて生成可能箇所を割り出し、
+		//そこからランダムに生成地点を決定
+		List<Vector2[]> spawnPoints = new List<Vector2[]>();
+		for(int v = 0; v <= bottomRightY; v++)
+		{
+			for(int h = 0; h <= bottomRightX; h++)
+			{
+                //ほかとかぶっていないか確認
+				if(IsAbleToSet(h, v, item))
+				{
+                    List<Vector2> spawnPoint = new List<Vector2>();
+					for(int i = 0; i < item.height; i++){
+                        for(int j = 0; j < item.width; j++){
+                            spawnPoint.Add(new Vector2(h + i, v + j));
+                        }
+                    }
+                    spawnPoints.Add(spawnPoint.ToArray());
+				}
+			}
+		}
 
         //範囲内でランダムな位置に生成地点を定める
-        int spawnX = Random.Range(0, bottomRightX);
-        int spawnY = Random.Range(0, bottomRightY);
+
+        Vector2[] spawnPos = spawnPoints[Random.Range(0, spawnPoints.Count)];
+
+        // int spawnX = Random.Range(0, bottomRightX);
+        // int spawnY = Random.Range(0, bottomRightY);
 
         //ほかのアイテムと被っていないかチェック
         //仮にかぶっていたら強制的に終了（何も生成しない）
-        for (int i = 0; i < item.height ; i++)
-        {
-            for (int j = 0; j < item.width ; j++)
-            {
-                if (itemExist[spawnY + i, spawnX + j] == true)
-                    return;
-            }
-        }
+        // for (int i = 0; i < item.height ; i++)
+        // {
+        //     for (int j = 0; j < item.width ; j++)
+        //     {
+        //         if (itemExist[spawnY + i, spawnX + j] == true)
+        //             return;
+        //     }
+        // }
 
 
         //次に生成する座標を算出
-        float centerIndexX = (spawnX + spawnX + item.width) / 2;
-        float centerIndexY = (spawnY + spawnY + item.height) / 2;
+        // float centerIndexX = (spawnX + spawnX + item.width) / 2;
+        // float centerIndexY = (spawnY + spawnY + item.height) / 2;
+        // float centerIndexX = (spawnPos.x + spawnPos.y + item.width) / 2;
+
 
         //生成処理
         GameObject it = Instantiate(item.gameObject, itemParentRect, false);
 
         //生成したオブジェクトに情報を付与
         DigItem dig = it.GetComponent<DigItem>();
-        for (int i = 0; i < item.height; i++)
-        {
-            for (int j = 0; j < item.width; j++)
-            {
-                dig.AddItemIndex(spawnX + j, spawnY + i);
-                itemExist[spawnY + i, spawnX + j] = true;
-            }
+        foreach(Vector2 p in spawnPos){
+            dig.AddItemIndex((int)p.x, (int)p.y);
+            itemExist[(int)p.x, (int)p.y] = true;
         }
+        // for (int i = 0; i < item.height; i++)
+        // {
+        //     for (int j = 0; j < item.width; j++)
+        //     {
+        //         dig.AddItemIndex(spawnX + j, spawnY + i);
+        //         itemExist[spawnY + i, spawnX + j] = true;
+        //     }
+        // }
 
         //大きさと位置を整える
         RectTransform itemRect = it.GetComponent<RectTransform>();
