@@ -10,10 +10,13 @@ public class DigItem : MonoBehaviour
     [SerializeField] private List<Vector2> itemIndexes;
     public int point{get; private set;}
     public string itemName { get; private set; }
+    [SerializeField]
+    private AudioClip foundSound;
+    private AudioSource sePlayer;
 
     void Start()
     {
-        
+        sePlayer = Camera.main.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -50,7 +53,7 @@ public class DigItem : MonoBehaviour
     /// </summary>
     private void OnFound()
     {
-        Debug.Log("アイテムを発見");
+        sePlayer.PlayOneShot(foundSound);
     }
 
     /// <summary>

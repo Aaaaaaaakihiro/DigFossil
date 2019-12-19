@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef325ff0f09fd584abdbfdccb28b76b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 1
-  height: 1
+  width: 2
+  height: 2
   itemIndexes: []
+  foundSound: {fileID: 8300000, guid: 1a0ec64fc3fb5fa4c996368370573f1a, type: 3}

@@ -20,6 +20,9 @@ public class DigTool : MonoBehaviour
     private DigToolChoice toolChoice;
     [SerializeField] 
     private Button[] digToolButtons;
+    [SerializeField]
+    private AudioClip[] digSounds;
+    private AudioSource sePlayer;
     
 
     protected void Start()
@@ -27,12 +30,15 @@ public class DigTool : MonoBehaviour
         toolChoice = DigToolChoice.Hammer;
         ChangeTool((int)toolChoice);
         stageMaker = GameObject.Find("BasePanel").GetComponent<DigStageMaker>();
+        sePlayer = Camera.main.GetComponent<AudioSource>();
     }
 
     void Update()
     {
 
     }
+
+
 
     /// <summary>
     /// ツールの選択を変える
@@ -54,6 +60,7 @@ public class DigTool : MonoBehaviour
     public virtual int GetPower()
     {
         stageMaker.DamageStage(power[(int)toolChoice]);
+        sePlayer.PlayOneShot(digSounds[(int)toolChoice]);
         return power[(int)toolChoice];
     }
 }

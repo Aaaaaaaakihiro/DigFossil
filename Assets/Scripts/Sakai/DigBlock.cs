@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class DigBlock : MonoBehaviour
 {
 
     //ブロックの耐久値
-    [HideInInspector] public int blockHealth;
+    //[HideInInspector] 
+    public int blockHealth;
     //ブロックの状態を表すスプライト
     [SerializeField] private Sprite[] blockStatusSprites;
     //ブロックの画像を入れるRawImage
@@ -27,26 +29,29 @@ public class DigBlock : MonoBehaviour
         
     }
 
-    /// <summary>
-    /// ポインタが重なっているかどうかを判定する
-    /// </summary>
-    /// <param name="pointer">ポインタの座標</param>
-    /// <returns></returns>
-    //private bool IsUnderPointer(Vector2 pointer)
-    //{
-    //    Rect rect = GetComponent<RectTransform>().rect;
-    //    return rect.Contains(pointer);
-    //}
 
     public void StartSetting(int x, int y)
     {
         digTool = GameObject.Find("DigTool").GetComponent<DigTool>();
         blockHealth = 3;
         SetSprite();
-        GetComponent<Button>().onClick.AddListener(() => { Dig(digTool.GetPower()); });
+        //最終的にブロックをImageにしてもButtonにしても対応できるように設定
+        if(GetComponent<Button>() != null)
+            GetComponent<Button>().onClick.AddListener(() => { Dig(digTool.GetPower()); });
         digStageMaker = GameObject.Find("BasePanel").GetComponent<DigStageMaker>();
         pos_x = x;
         pos_y = y;
+    }
+
+
+    public void OnClicked(BaseEventData data)
+    {
+        PointerEventData pointerEventData = (PointerEventData)data;
+        GameObject result = pointerEventData.pointerCurrentRaycast.gameObject;
+        if(result.tag == "DigBlock")
+        {
+            result.GetComponent<DigBlock>().Dig(digTool.GetPower());
+        }
     }
 
     /// <summary>
@@ -80,7 +85,7 @@ public class DigBlock : MonoBehaviour
     /// 耐久値が０になったら非表示にする
     /// </summary>
     /// <param name="power">ハンマーなどの掘る道具のパワー</param>
-    protected virtual void Dig(int power)
+    public virtual void Dig(int power)
     {
         blockHealth -= power;
         if (CheckState())

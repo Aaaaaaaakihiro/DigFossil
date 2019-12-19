@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DigEvent
   - Item
+  - DigBlock
   layers:
   - Default
   - TransparentFX

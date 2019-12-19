@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   power: 0300000001000000
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
   digToolButtons:
   - {fileID: 0}
   - {fileID: 0}
+  digSounds:
+  - {fileID: 8300000, guid: 0a7f9907ed71ee34390f2e8d9714bdd6, type: 3}
+  - {fileID: 8300000, guid: 0bda28deacb0c8b4fb3876c29ea7e76f, type: 3}
