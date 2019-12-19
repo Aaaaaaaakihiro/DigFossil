@@ -208,7 +208,7 @@ public class DigStageMaker : MonoBehaviour
         healthGage.value = stageHealth;
         if(stageHealth <= 0)
         {
-            Debug.Log("Stage Broken");
+            GameObject.Find("ResultPanel").GetComponent<DigResult>().Open();
         }
     }
 }
