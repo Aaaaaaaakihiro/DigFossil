@@ -475,15 +475,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8498612187207656257, guid: 1c04b7a8232b95e4a997bf6aeccb48ba,
+    - target: {fileID: 8498612188353208245, guid: 1c04b7a8232b95e4a997bf6aeccb48ba,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8498612187207656259, guid: 1c04b7a8232b95e4a997bf6aeccb48ba,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: m_Name
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8498612188353208202, guid: 1c04b7a8232b95e4a997bf6aeccb48ba,
         type: 3}
@@ -539,11 +534,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8498612188353208245, guid: 1c04b7a8232b95e4a997bf6aeccb48ba,
-        type: 3}
-      propertyPath: m_Name
-      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8498612188353208246, guid: 1c04b7a8232b95e4a997bf6aeccb48ba,
         type: 3}
@@ -1552,6 +1542,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2216056765898887436, guid: 345044cf610892c44b22525f20040079,
+        type: 3}
+      propertyPath: m_Name
+      value: Plane
+      objectReference: {fileID: 0}
     - target: {fileID: 2216056765898887424, guid: 345044cf610892c44b22525f20040079,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1606,11 +1601,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2216056765898887436, guid: 345044cf610892c44b22525f20040079,
-        type: 3}
-      propertyPath: m_Name
-      value: Plane
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 345044cf610892c44b22525f20040079, type: 3}
