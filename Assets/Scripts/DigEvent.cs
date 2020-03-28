@@ -21,6 +21,7 @@ public class DigEvent : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 GameLoopManager.instance.dispatch(GameLoopManager.GameState.DIG);
+				
             }
         }
     }
