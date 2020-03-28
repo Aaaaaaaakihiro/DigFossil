@@ -107,7 +107,7 @@ public class GameLoopManager : MonoBehaviour
         //{
         //    QuickSaveManager.instance.quickSaveInExplore();
         //}
-        SceneManager.LoadScene("Town");
+        SceneManager.LoadScene("Town_Hirono");
         //違うシーンから遷移した時はクイックセーブされたポジションを参照する
         //QuickSaveManager.instance.quickLoadInTown();
     }
@@ -121,7 +121,7 @@ public class GameLoopManager : MonoBehaviour
         //{
         //    QuickSaveManager.instance.quickSaveInTown();
         //}
-        SceneManager.LoadScene("Explore");
+        SceneManager.LoadScene("Explore_Hirono");
         //違うシーンから遷移した時はクイックセーブされたポジションを参照する
         //QuickSaveManager.instance.quickLoadInExplore();
     }
@@ -132,7 +132,7 @@ public class GameLoopManager : MonoBehaviour
         currentState = GameState.DIG;
         //掘りシーンに移行する時に探検シーンでの位置を保存する
         //QuickSaveManager.instance.quickSaveInExplore();
-        SceneManager.LoadScene("Dig");
+        SceneManager.LoadScene("Dig_Sakai");
         
     }
 
