@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ItemPart
+{
+    HEAD = 0,
+    BODY,
+    LEG
+}
+
 
 public class DigItem : MonoBehaviour
 {
@@ -13,10 +20,19 @@ public class DigItem : MonoBehaviour
     [SerializeField]
     private AudioClip foundSound;
     private AudioSource sePlayer;
+    private DigResult digResult;
+    // アイテムの部位（頭，胴体，足のいずれかになる）
+    [HideInInspector]
+    public ItemPart itemPart;
 
     void Start()
     {
         sePlayer = Camera.main.GetComponent<AudioSource>();
+        digResult = GameObject.Find("ResultPanel").GetComponent<DigResult>();
+        string[] names = new string[] { "何かの頭", "何かの胴体", "何かの足" };
+        itemPart = (ItemPart)Random.Range(0, 3);
+        itemName = names[(int)itemPart];
+        Debug.Log(itemName);
     }
 
     void Update()
@@ -54,6 +70,7 @@ public class DigItem : MonoBehaviour
     private void OnFound()
     {
         sePlayer.PlayOneShot(foundSound);
+        digResult.getItems.Add(this);
     }
 
     /// <summary>

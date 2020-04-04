@@ -44,11 +44,12 @@ public class DigBlock : MonoBehaviour
     }
 
 
+    // ブロックがクリックされたときに自動的に呼ばれる
     public void OnClicked(BaseEventData data)
     {
         PointerEventData pointerEventData = (PointerEventData)data;
         GameObject result = pointerEventData.pointerCurrentRaycast.gameObject;
-        if(result.tag == "DigBlock")
+        if (result.tag == "DigBlock")
         {
             result.GetComponent<DigBlock>().Dig(digTool.GetPower());
         }
@@ -58,7 +59,7 @@ public class DigBlock : MonoBehaviour
     /// 耐久値が０であるかどうかを調べる
     /// </summary>
     /// <returns>耐久値が０ならtrue、０でなければfalse</returns>
-    private bool CheckState()
+    private bool CheckStateIsHealthZero()
     {
         return blockHealth == 0;
     }
@@ -71,6 +72,8 @@ public class DigBlock : MonoBehaviour
         if (blockImage == null)
             blockImage = GetComponent<Image>();
 
+        // ブロックの画像が設定されている場合は，画像にする
+        // 設定されていない場合は色を変える
         if(blockStatusSprites != null && blockStatusSprites.Length != 0)
             blockImage.sprite = blockStatusSprites[blockHealth];
         else
@@ -88,7 +91,7 @@ public class DigBlock : MonoBehaviour
     public virtual void Dig(int power)
     {
         blockHealth -= power;
-        if (CheckState())
+        if (CheckStateIsHealthZero())
         {
             gameObject.SetActive(false);
             digStageMaker.DestroyBlock(pos_x, pos_y);

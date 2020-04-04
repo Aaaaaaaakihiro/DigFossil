@@ -5,31 +5,48 @@ using UnityEngine.UI;
 
 public class DigStageMaker : MonoBehaviour
 {
-    //ブロックのプレハブ
+    // ブロックのプレハブ
     [SerializeField] private GameObject digBlock;
-    //ブロックを生成するパネル
+
+    // ブロックを生成するパネル
     private GameObject basePanel;
-    //幅、横の数
+
+    // 幅、横の数
     [SerializeField] private int width;
-    //高さ、縦の数
+
+    // 高さ、縦の数
     [SerializeField] private int height;
-    //ブロック生成の親
+
+    // 生成するアイテムの数
+    [SerializeField] private int spawnItemCount;
+
+    // ブロック生成の親
     private GameObject blockParent;
-    //ブロックの情報を入れる配列
+
+    // ブロックの情報を入れる配列
     private bool[,] digBlockExist;
-    //アイテムが存在するかどうかを管理する配列
+
+    // アイテムが存在するかどうかを管理する配列
     private bool[,] itemExist;
-    //アイテム生成の親　位置的にはブロック生成の親と同じ
+
+    // アイテム生成の親　位置的にはブロック生成の親と同じ
     private GameObject itemParent;
-    //ステージの耐久値
+
+    // ステージの耐久値
     [SerializeField] private int stageHealth;
-    //ステージの耐久値を表示するスライダー
+
+    // ステージの耐久値を表示するスライダー
     [SerializeField] private Slider healthGage;
-    //ブロックの横幅
+
+    // ブロックの横幅
     private float blockWidth;
-    //ブロックの縦幅
+
+    // ブロックの縦幅
     private float blockHeight;
+
     [SerializeField] private GameObject greenRockItem;
+
+
 
     void Start()
     {
@@ -69,7 +86,7 @@ public class DigStageMaker : MonoBehaviour
 
         for (int i = 0; i < h; i++)
         {
-            for(int j = 0; j < w; j++)
+            for (int j = 0; j < w; j++)
             {
                 GameObject b = Instantiate(block, parentRect, false);
                 RectTransform rect = b.GetComponent<RectTransform>();
@@ -77,13 +94,13 @@ public class DigStageMaker : MonoBehaviour
                 rect.localScale = Vector2.one;
                 rect.sizeDelta = new Vector2(blockWidth, blockHeight);
                 b.SetActive(true);
-                rect.localPosition = new Vector2( blockWidth * j, -blockHeight * i);
-                b.GetComponent<DigBlock>().StartSetting(j,i);
+                rect.localPosition = new Vector2(blockWidth * j, -blockHeight * i);
+                b.GetComponent<DigBlock>().StartSetting(j, i);
                 digBlockExist[i, j] = true;
             }
         }
 
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < spawnItemCount; i++)
         {
             SetItemOnRandomPoint(greenRockItem.GetComponent<DigItem>(),
                 width,
@@ -93,28 +110,28 @@ public class DigStageMaker : MonoBehaviour
                 itemParent.GetComponent<RectTransform>());
         }
 
-        
+
     }
 
     void Update()
     {
-        
+
     }
-    
+
     private bool IsAbleToSet(int h, int v, DigItem item)
     {
-		for (int i = 0; i < item.width; i++)
-		{
-			for(int j = 0; j < item.height; j++)
-			{
-				if(itemExist[v + j , h + i])
-					return false;
-			}
-		}
-		return true;
-	}
-    
-    
+        for (int i = 0; i < item.width; i++)
+        {
+            for (int j = 0; j < item.height; j++)
+            {
+                if (itemExist[v + j, h + i])
+                    return false;
+            }
+        }
+        return true;
+    }
+
+
     /// <summary>
     /// ランダムな位置にアイテムを生成する
     /// ランダムな位置の決定方法は、生成可能地点のリストを作り、その中からランダムに選ぶことで実装
@@ -134,23 +151,25 @@ public class DigStageMaker : MonoBehaviour
         //アイテムの形に応じて生成可能箇所を割り出し、
         //そこからランダムに生成地点を決定
         List<Vector2[]> spawnPoints = new List<Vector2[]>();
-		for(int v = 0; v <= bottomRightY; v++)
-		{
-			for(int h = 0; h <= bottomRightX; h++)
-			{
+        for (int v = 0; v <= bottomRightY; v++)
+        {
+            for (int h = 0; h <= bottomRightX; h++)
+            {
                 //ほかとかぶっていないか確認
-				if(IsAbleToSet(h, v, item))
-				{
+                if (IsAbleToSet(h, v, item))
+                {
                     List<Vector2> spawnPoint = new List<Vector2>();
-					for(int i = 0; i < item.height; i++){
-                        for(int j = 0; j < item.width; j++){
+                    for (int i = 0; i < item.height; i++)
+                    {
+                        for (int j = 0; j < item.width; j++)
+                        {
                             spawnPoint.Add(new Vector2(h + i, v + j));
                         }
                     }
                     spawnPoints.Add(spawnPoint.ToArray());
-				}
-			}
-		}
+                }
+            }
+        }
 
         //範囲内でランダムな位置に生成地点を定める
         if (spawnPoints.Count == 0)
@@ -168,7 +187,8 @@ public class DigStageMaker : MonoBehaviour
 
         //生成したオブジェクトに情報を付与
         DigItem dig = it.GetComponent<DigItem>();
-        foreach(Vector2 p in spawnPos){
+        foreach (Vector2 p in spawnPos)
+        {
             dig.AddItemIndex((int)p.x, (int)p.y);
             itemExist[(int)p.y, (int)p.x] = true;
         }
@@ -183,7 +203,7 @@ public class DigStageMaker : MonoBehaviour
     }
 
     /// <summary>
-    /// 指定した位置にブロックを破壊する
+    /// 指定した位置のブロックを破壊する
     /// </summary>
     /// <param name="x">指定座標のX成分</param>
     /// <param name="y">指定座標のY成分</param>
@@ -206,7 +226,7 @@ public class DigStageMaker : MonoBehaviour
     {
         stageHealth -= damage;
         healthGage.value = stageHealth;
-        if(stageHealth <= 0)
+        if (stageHealth <= 0)
         {
             GameObject.Find("ResultPanel").GetComponent<DigResult>().Open();
         }

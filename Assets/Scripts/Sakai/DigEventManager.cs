@@ -36,7 +36,7 @@ public class DigEventManager : MonoBehaviour
             events[i] = points[i].GetComponent<DigEvent>();
             events[i].gameObject.SetActive(false);
         }
-        Debug.Log("Even Point Count : " + events.Length);
+        //Debug.Log("Even Point Count : " + events.Length);
         return events;
     }
 }
