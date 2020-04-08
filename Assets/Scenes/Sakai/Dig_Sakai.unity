@@ -833,6 +833,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e1258097ec1403b47bcfbe846aaa207e, type: 3}
   - {fileID: 21300000, guid: a8088c0369ab0f34b9f386d3283cc51b, type: 3}
   - {fileID: 21300000, guid: 69a41a9eeff5dd440a0134b156ffb124, type: 3}
+  itemRectBoarder: 3
 --- !u!1001 &808234199
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1797,8 +1798,8 @@ MonoBehaviour:
   m_Content: {fileID: 1014664875}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 0
-  m_Elasticity: 0.1
+  m_MovementType: 1
+  m_Elasticity: 5
   m_Inertia: 0
   m_DecelerationRate: 0.135
   m_ScrollSensitivity: 1

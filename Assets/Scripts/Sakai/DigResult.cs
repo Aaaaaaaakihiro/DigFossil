@@ -42,14 +42,15 @@ public class DigResult : MonoBehaviour
     [SerializeField]
     private List<Sprite> itemSprites;
 
-    // 結果表示部分の親オブジェクトの1フレーム前の位置
-    private Vector2 beforePosOfParent;
-
     // 結果表示部分の位置の上限
     private int maxYofParent;
 
     // 結果表示部分の位置の下限
     private int minYofParent;
+
+    // 結果表示画面のモード切り替えの境界となるアイテム数
+    [SerializeField]
+    private int itemRectBoarder;
 
 
 
@@ -60,8 +61,7 @@ public class DigResult : MonoBehaviour
         resultText = GameObject.Find("ResultMessage").GetComponent<Text>();
         getItems = new List<DigItem>();
         scrollRect.horizontal = false;
-        beforePosOfParent = itemParentRect.localPosition;
-        maxYofParent = (int)beforePosOfParent.y;
+        maxYofParent = (int)itemParentRect.localPosition.y;
     }
 
     void Update()
@@ -124,7 +124,7 @@ public class DigResult : MonoBehaviour
                     items.Add(item.itemName, 1);
             }
 
-            if (items.Count <= 3)
+            if (items.Count <= itemRectBoarder)
             {
                 scrollRect.vertical = false;
             }
@@ -149,7 +149,7 @@ public class DigResult : MonoBehaviour
                 itemRect.SetParent(itemParentRect);
                 itemRect.localScale = Vector3.one;
                 itemRect.localPosition = resultItemOrigin;
-                resultItemOrigin.y -= 150;
+                resultItemOrigin.y -= diff;
                 itemRect.transform.GetChild(0).GetComponent<Image>().sprite = itemSprites[itemNames.IndexOf(key)];
                 itemRect.transform.GetChild(1).GetComponent<Text>().text = key + "(x" + items[key] + ")";
             }
