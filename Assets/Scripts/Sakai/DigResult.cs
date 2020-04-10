@@ -52,6 +52,13 @@ public class DigResult : MonoBehaviour
     [SerializeField]
     private int itemRectBoarder;
 
+    // 結果画面のコンテンツが上に超えていればtrue，下に超えていればfalse
+    private bool isOverUp;
+
+#if UNITY_EDITOR
+    private Vector2 beforeMousePos;
+#endif
+
 
 
     void Start()
@@ -66,15 +73,16 @@ public class DigResult : MonoBehaviour
 
     void Update()
     {
-        if(itemParentRect.localPosition.y > maxYofParent)
+        if(itemParentRect.localPosition.y < maxYofParent)
         {
             Vector2 pos = itemParentRect.localPosition;
-            pos.y--;
+            pos.y = maxYofParent;
             itemParentRect.localPosition = pos;
-        }else if(itemParentRect.localPosition.y < minYofParent)
+
+        }else if(itemParentRect.localPosition.y > minYofParent)
         {
             Vector2 pos = itemParentRect.localPosition;
-            pos.y++;
+            pos.y = minYofParent;
             itemParentRect.localPosition = pos;
         }
     }
@@ -154,7 +162,10 @@ public class DigResult : MonoBehaviour
                 itemRect.transform.GetChild(1).GetComponent<Text>().text = key + "(x" + items[key] + ")";
             }
 
-            minYofParent = maxYofParent - diff * count;
+            minYofParent = maxYofParent + diff * (count - itemRectBoarder);
+
+            //Debug.Log("maxYofParent : " + maxYofParent);
+            //Debug.Log("minYofParent : " + minYofParent);
         }
     }
 }
