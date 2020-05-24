@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using MoonSharp.Interpreter;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,10 +19,15 @@ public class TapController : MonoBehaviour
     private static Vector3 destinationPoint = Vector3.zero;
     private bool isReachedDestination = false;
 
+    //アニメーション用スクリプト
+    private PlayerAniCon aniCon;
+
     // Start is called before the first frame update
     void Start()
     {
         destinationPoint.y = offset;
+
+        aniCon = this.gameObject.GetComponent<PlayerAniCon>();
     }
 
     // Update is called once per frame
@@ -38,6 +44,7 @@ public class TapController : MonoBehaviour
     /// </summary>
     private void setDestinationPoint()
     {
+        //エディター上での処理
         if (Application.isEditor)
         {
             if (Input.GetMouseButton(0))
@@ -57,6 +64,7 @@ public class TapController : MonoBehaviour
         }
         else
         {
+            //モバイル上での処理(タップ処理)
             if (Input.touchCount > 0)
             {
                 Touch touch = Input.GetTouch(0);
@@ -84,6 +92,12 @@ public class TapController : MonoBehaviour
         //destinationPointに着いていない間はずっとdestinationPointまで移動する
         if (!isReachedDestination)
         {
+            //向かう方向へ視線を向ける
+            this.gameObject.transform.LookAt(destinationPoint);
+
+            //歩くモーションをオンにする
+            aniCon.setWalkBoolTrue();
+
             float step = moveSpeed * Time.deltaTime;
             this.gameObject.transform.position = Vector3.MoveTowards(this.transform.position, destinationPoint, step);
 
@@ -92,6 +106,11 @@ public class TapController : MonoBehaviour
             {
                 isReachedDestination = true;
             }
+        }
+        else
+        {
+            //待機モーションをオン
+            aniCon.setWalkBoolFalse();
         }
     }
 }
