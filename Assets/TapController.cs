@@ -10,6 +10,9 @@ public class TapController : MonoBehaviour
     //目的ポイントの半径。半径内に到達すると移動を終了させる。
     [SerializeField]
     private float destinationPointRadius = 2.0f;
+    //初期位置の地面からのオフセット値
+    [SerializeField]
+    private float offset = 10;
 
     //タップするたびに更新される目的地
     private static Vector3 destinationPoint = Vector3.zero;
@@ -18,7 +21,7 @@ public class TapController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        destinationPoint.y = offset;
     }
 
     // Update is called once per frame
@@ -46,7 +49,8 @@ public class TapController : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, 30.0f))
                 {
                     destinationPoint = hit.point;
-                    destinationPoint.y = this.gameObject.transform.position.y;
+                    //destinationPoint.y = this.gameObject.transform.position.y;
+                    destinationPoint.y = offset;
                     Debug.Log($"Editor/移動先の座標:{destinationPoint}");
                 }
             }
@@ -63,7 +67,8 @@ public class TapController : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, 30.0f))
                 {
                     destinationPoint = hit.point;
-                    destinationPoint.y = this.gameObject.transform.position.y;
+                    //destinationPoint.y = this.gameObject.transform.position.y;
+                    destinationPoint.y = offset;
                     Debug.Log($"Mobile/移動先の座標:{destinationPoint}");
                 }
 
