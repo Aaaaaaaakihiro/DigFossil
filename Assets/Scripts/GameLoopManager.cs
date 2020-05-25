@@ -121,7 +121,7 @@ public class GameLoopManager : MonoBehaviour
         //{
         //    QuickSaveManager.instance.quickSaveInTown();
         //}
-        SceneManager.LoadScene("Explore");
+        SceneManager.LoadScene("Explore_Hirono");
         //違うシーンから遷移した時はクイックセーブされたポジションを参照する
         //QuickSaveManager.instance.quickLoadInExplore();
     }

@@ -6,21 +6,19 @@ using UnityEngine.SceneManagement;
 public class EnterExplore : MonoBehaviour
 {
     private bool isPlayerEnteringCollision = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
     {
         if (isPlayerEnteringCollision)
         {
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                GameLoopManager.instance.dispatch(GameLoopManager.GameState.EXPLORE);
-            }
+            //プレイヤーがコライダー内に入ると探索シーンにシーン遷移
+            GameLoopManager.instance.dispatch(GameLoopManager.GameState.EXPLORE);
+
+            //if (Input.GetKeyDown(KeyCode.Z))
+            //{
+            //    GameLoopManager.instance.dispatch(GameLoopManager.GameState.EXPLORE);
+            //}
         }
     }
 

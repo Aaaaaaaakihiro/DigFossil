@@ -25,7 +25,8 @@ public class TapController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        destinationPoint.y = offset;
+        destinationPoint = this.transform.position;
+        //destinationPoint.y = offset;
 
         aniCon = this.gameObject.GetComponent<PlayerAniCon>();
     }

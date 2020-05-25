@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Town.unity
     guid: 2b5a316359d76ad48a37d102797247d8
   - enabled: 1
+    path: Assets/Scenes/Hirono/Explore_Hirono.unity
+    guid: c6207620442fdda4084253192d2e4d8f
+  - enabled: 1
     path: Assets/Scenes/Explore.unity
     guid: 20861aacc84b6d94fa8760e4b77036c3
   - enabled: 1
