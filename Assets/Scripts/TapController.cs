@@ -55,10 +55,13 @@ public class TapController : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 30.0f))
                 {
-                    destinationPoint = hit.point;
-                    //destinationPoint.y = this.gameObject.transform.position.y;
-                    destinationPoint.y = offset;
-                    Debug.Log($"Editor/移動先の座標:{destinationPoint}");
+                    if (hit.collider.tag == "Terrain")
+                    {
+                        destinationPoint = hit.point;
+                        //destinationPoint.y = this.gameObject.transform.position.y;
+                        destinationPoint.y = offset;
+                        Debug.Log($"Editor/移動先の座標:{destinationPoint}");
+                    }
                 }
             }
         }
@@ -74,10 +77,13 @@ public class TapController : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 30.0f))
                 {
-                    destinationPoint = hit.point;
-                    //destinationPoint.y = this.gameObject.transform.position.y;
-                    destinationPoint.y = offset;
-                    Debug.Log($"Mobile/移動先の座標:{destinationPoint}");
+                    if(hit.collider.tag == "Terrain")
+                    {
+                        destinationPoint = hit.point;
+                        //destinationPoint.y = this.gameObject.transform.position.y;
+                        destinationPoint.y = offset;
+                        Debug.Log($"Mobile/移動先の座標:{destinationPoint}");
+                    }
                 }
 
             }
