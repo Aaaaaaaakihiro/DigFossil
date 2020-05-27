@@ -11,6 +11,11 @@ public class NPCCotroller : MonoBehaviour
         lookAtTarget = GameObject.FindGameObjectsWithTag("Player")[0];
     }
 
+    public void OnUserAction()
+    {
+        this.gameObject.GetComponent<ConversationController>().StartConversation();
+    }
+
     // Update is called once per frame
     void Update()
     {

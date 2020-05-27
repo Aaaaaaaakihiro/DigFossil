@@ -6,6 +6,8 @@ TagManager:
   tags:
   - SubCamera
   - Terrain
+  - NPC
+  - InteractiveObject
   layers:
   - Default
   - TransparentFX

@@ -8,9 +8,9 @@ public class MainCameraConstroller : MonoBehaviour
     private Vector3 camPos;
 
     [SerializeField]
-    private float offset = 30;
+    private float offset = 10;
     [SerializeField]
-    private float rotateAngle = 45;
+    private float rotateAngle = 3;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");

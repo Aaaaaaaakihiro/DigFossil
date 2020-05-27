@@ -7,20 +7,23 @@ public class TapController : MonoBehaviour
 {
     //移動スピード
     [SerializeField] 
-    private float moveSpeed = 20;
+    private float _moveSpeed = 20;
     //目的ポイントの半径。半径内に到達すると移動を終了させる。
     [SerializeField]
-    private float destinationPointRadius = 2.0f;
+    private float _destinationPointRadius = 2.0f;
     //初期位置の地面からのオフセット値
     [SerializeField]
-    private float offset = 10;
+    private float _offset = 10;
 
     //タップするたびに更新される目的地
     private static Vector3 destinationPoint = Vector3.zero;
-    private bool isReachedDestination = false;
+    private bool _isReachedDestination = false;
+
+    //インタラクト可能な物体を検知したときにTrueになるBool
+    private bool _isEnteringOtherCollision = false;
 
     //アニメーション用スクリプト
-    private PlayerAniCon aniCon;
+    private PlayerAniCon _aniCon;
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +31,7 @@ public class TapController : MonoBehaviour
         destinationPoint = this.transform.position;
         //destinationPoint.y = offset;
 
-        aniCon = this.gameObject.GetComponent<PlayerAniCon>();
+        _aniCon = this.gameObject.GetComponent<PlayerAniCon>();
     }
 
     // Update is called once per frame
@@ -50,20 +53,59 @@ public class TapController : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                isReachedDestination = false;
+                _isReachedDestination = false;
+
+                
 
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 30.0f))
+
+                //複数Rayに対してタグに応じた処理を行う
+                RaycastHit[] hits;
+                hits = Physics.RaycastAll(ray, 50.0f);
+
+                for (int i = 0; i < hits.Length; i++)
                 {
+                    RaycastHit hit = hits[i];
                     if (hit.collider.tag == "Terrain")
                     {
                         destinationPoint = hit.point;
                         //destinationPoint.y = this.gameObject.transform.position.y;
-                        destinationPoint.y = offset;
+                        destinationPoint.y = _offset;
                         Debug.Log($"Editor/移動先の座標:{destinationPoint}");
                     }
+                    else if (hit.collider.tag == "NPC")
+                    {
+                        if (_isEnteringOtherCollision)
+                            hit.collider.gameObject.GetComponent<NPCCotroller>().OnUserAction();
+                    }
+                    else if (hit.collider.tag == "InteractiveObject")
+                    {
+                        if (_isEnteringOtherCollision)
+                            hit.collider.gameObject.GetComponent<InteractiveObjectController>().OnUserAction();
+                    }
                 }
+
+                //RaycastHit hit;
+                //if (Physics.Raycast(ray, out hit, 30.0f))
+                //{
+                //    if (hit.collider.tag == "Terrain")
+                //    {
+                //        destinationPoint = hit.point;
+                //        //destinationPoint.y = this.gameObject.transform.position.y;
+                //        destinationPoint.y = _offset;
+                //        Debug.Log($"Editor/移動先の座標:{destinationPoint}");
+                //    }
+                //    else if(hit.collider.tag == "NPC")
+                //    {
+                //        if(_isEnteringOtherCollision)
+                //        hit.collider.gameObject.GetComponent<NPCCotroller>().OnUserAction();
+                //    }
+                //    else if (hit.collider.tag == "InteractiveObject")
+                //    {
+                //        if(_isEnteringOtherCollision)
+                //        hit.collider.gameObject.GetComponent<InteractiveObjectController>().OnUserAction();
+                //    }
+                //}
             }
         }
         else
@@ -72,7 +114,7 @@ public class TapController : MonoBehaviour
             if (Input.touchCount > 0)
             {
                 Touch touch = Input.GetTouch(0);
-                isReachedDestination = false;
+                _isReachedDestination = false;
 
                 Ray ray = Camera.main.ScreenPointToRay(touch.position);
                 RaycastHit hit;
@@ -82,7 +124,7 @@ public class TapController : MonoBehaviour
                     {
                         destinationPoint = hit.point;
                         //destinationPoint.y = this.gameObject.transform.position.y;
-                        destinationPoint.y = offset;
+                        destinationPoint.y = _offset;
                         Debug.Log($"Mobile/移動先の座標:{destinationPoint}");
                     }
                 }
@@ -97,27 +139,44 @@ public class TapController : MonoBehaviour
     private void headingToDestination()
     {
         //destinationPointに着いていない間はずっとdestinationPointまで移動する
-        if (!isReachedDestination)
+        if (!_isReachedDestination)
         {
             //向かう方向へ視線を向ける
             this.gameObject.transform.LookAt(destinationPoint);
 
             //歩くモーションをオンにする
-            aniCon.setWalkBoolTrue();
+            _aniCon.setWalkBoolTrue();
 
-            float step = moveSpeed * Time.deltaTime;
+            float step = _moveSpeed * Time.deltaTime;
             this.gameObject.transform.position = Vector3.MoveTowards(this.transform.position, destinationPoint, step);
 
             //目的地との距離がdestinationPointRadius以内にになると移動が終了する。
-            if (Vector3.Distance(this.gameObject.transform.position, destinationPoint) < destinationPointRadius)
+            if (Vector3.Distance(this.gameObject.transform.position, destinationPoint) < _destinationPointRadius)
             {
-                isReachedDestination = true;
+                _isReachedDestination = true;
             }
         }
         else
         {
             //待機モーションをオン
-            aniCon.setWalkBoolFalse();
+            _aniCon.setWalkBoolFalse();
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag != "Player")
+        {
+            _isEnteringOtherCollision = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag != "Player")
+        {
+            _isEnteringOtherCollision = false;
+        }
+    }
+
 }

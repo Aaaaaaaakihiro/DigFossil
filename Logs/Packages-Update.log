@@ -24,3 +24,14 @@ Update Mode: updateDependencies
 
 The following packages were updated:
   com.unity.ide.rider from version 1.0.8 to 1.1.0
+
+=== Tue May 26 16:10:10 2020
+
+Packages were changed.
+Update Mode: mergeDefaultDependencies
+
+The following packages were added:
+  com.unity.2d.sprite@1.0.0
+  com.unity.ext.nunit@1.0.0
+  com.unity.test-framework@1.0.13
+  com.unity.timeline@1.1.0
