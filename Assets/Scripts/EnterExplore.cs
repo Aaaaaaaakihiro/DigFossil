@@ -13,7 +13,7 @@ public class EnterExplore : MonoBehaviour
         if (isPlayerEnteringCollision)
         {
             //プレイヤーがコライダー内に入ると探索シーンにシーン遷移
-            GameLoopManager.instance.dispatch(GameLoopManager.GameState.EXPLORE);
+            GameLoopManager.instance.dispatch(SceneData.GameState.EXPLORE);
 
             //if (Input.GetKeyDown(KeyCode.Z))
             //{

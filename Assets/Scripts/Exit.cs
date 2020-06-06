@@ -5,11 +5,6 @@ using UnityEngine;
 public class Exit : MonoBehaviour
 {
     private bool isPlayerEnteringCollision = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -18,7 +13,7 @@ public class Exit : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                GameLoopManager.instance.dispatch(GameLoopManager.GameState.TOWN);
+                GameLoopManager.instance.dispatch(SceneData.GameState.TOWN);
             }
         }
     }

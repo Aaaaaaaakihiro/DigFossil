@@ -16,7 +16,7 @@ public class InteractiveObjectController : MonoBehaviour
     {
         if (_event == _eventList._digEvent)
         {
-            GameLoopManager.instance.dispatch(GameLoopManager.GameState.DIG);
+            GameLoopManager.instance.dispatch(SceneData.GameState.DIG);
         }
     }
 }

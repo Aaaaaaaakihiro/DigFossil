@@ -11,15 +11,15 @@ public class GameLoopManager : MonoBehaviour
     /// <summary>
     /// ゲームの状態一覧
     /// </summary>
-    public enum GameState
-    {
-        TITLE,
-        TOWN,
-        EXPLORE,
-        DIG
-    }
+    //public enum GameState
+    //{
+    //    TITLE,
+    //    TOWN,
+    //    EXPLORE,
+    //    DIG
+    //}
 
-    public GameState currentState = GameState.TITLE;
+    public SceneData.GameState currentState = SceneData.GameState.TITLE;
 
     private void Awake()
     {
@@ -94,14 +94,14 @@ public class GameLoopManager : MonoBehaviour
     //タイトルのシーンに遷移させる関数
     void switchToTitleScene()
     {
-        currentState = GameState.TITLE;
+        currentState = SceneData.GameState.TITLE;
         SceneManager.LoadScene("Title");
     }
 
     //街のシーンに遷移させる関数
     void switchToTownScene()
     {
-        currentState = GameState.TOWN;
+        currentState = SceneData.GameState.TOWN;
         //探検→街と遷移するときは、探検シーンの洞窟の入口でクイックセーブ
         //if (SceneManager.GetActiveScene().name == "Explore")
         //{
@@ -115,7 +115,7 @@ public class GameLoopManager : MonoBehaviour
     //探検のシーンに遷移させる関数
     void switchToExploreScene()
     {
-        currentState = GameState.EXPLORE;
+        currentState = SceneData.GameState.EXPLORE;
         //街→探検と遷移するときは、街シーンの洞窟の入口でクイックセーブ
         //if (SceneManager.GetActiveScene().name == "Town")
         //{
@@ -129,33 +129,33 @@ public class GameLoopManager : MonoBehaviour
     //掘りのシーンに遷移させる関数
     void switchToDigScene()
     {
-        currentState = GameState.DIG;
+        currentState = SceneData.GameState.DIG;
         //掘りシーンに移行する時に探検シーンでの位置を保存する
         //QuickSaveManager.instance.quickSaveInExplore();
         SceneManager.LoadScene("Dig");
         
     }
 
-    public void dispatch(GameState state)
+    public void dispatch(SceneData.GameState state)
     {
-        GameState oldState = currentState;
+        SceneData.GameState oldState = currentState;
         currentState = state;
 
         switch (state)
         {
-            case GameState.TITLE:
+            case SceneData.GameState.TITLE:
                 switchToTitleScene();
                 break;
 
-            case GameState.TOWN:
+            case SceneData.GameState.TOWN:
                 switchToTownScene();
                 break;
 
-            case GameState.EXPLORE:
+            case SceneData.GameState.EXPLORE:
                 switchToExploreScene();
                 break;
 
-            case GameState.DIG:
+            case SceneData.GameState.DIG:
                 switchToDigScene();
                 break;
 

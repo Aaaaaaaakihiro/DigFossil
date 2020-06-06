@@ -1,22 +1,24 @@
-﻿using System.Collections;
+﻿using Fungus;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DigEvent : MonoBehaviour
+public class TransitionPointController : MonoBehaviour
 {
+    //インスペクターで遷移する先のシーンを選ぶ
+    [SerializeField] private SceneData.GameState _scene = SceneData.GameState.DIG;
+
+    //プレイヤーがコリジョンに入ってるかどうか
     private bool isPlayerEnteringCollision = false;
 
-    // Update is called once per frame
     void Update()
     {
         if (isPlayerEnteringCollision)
         {
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                GameLoopManager.instance.dispatch(SceneData.GameState.DIG);
-            }
+            GameLoopManager.instance.dispatch(_scene);
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")

@@ -12,7 +12,7 @@ public class titleTap : MonoBehaviour
 
     public void startGame()
     {
-        GameLoopManager.instance.dispatch(GameLoopManager.GameState.TOWN);
+        GameLoopManager.instance.dispatch(SceneData.GameState.TOWN);
     }
 
     // Update is called once per frame

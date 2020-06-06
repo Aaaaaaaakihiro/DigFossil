@@ -18,6 +18,6 @@ public class NextButton : MonoBehaviour
 
     public void digEventOver()
     {
-        GameLoopManager.instance.dispatch(GameLoopManager.GameState.EXPLORE);
+        GameLoopManager.instance.dispatch(SceneData.GameState.EXPLORE);
     }
 }
