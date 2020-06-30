@@ -20,4 +20,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Dig.unity
     guid: f72e14f4ebdf38342b0cb9b7471bffb8
+  - enabled: 1
+    path: Assets/Scenes/Hirono/Lab_Hirono.unity
+    guid: fffb4c6f5c4aeeb4aa2430925bf90c16
+  - enabled: 1
+    path: Assets/Scenes/Hirono/Town_Hirono.unity
+    guid: fc16cc3d9f23d5340b294e72b259786f
   m_configObjects: {}

@@ -7,6 +7,9 @@ public class GameLoopManager : MonoBehaviour
 {
     //staticなインスタンスを作成していつでもアクセスできるように
     public static GameLoopManager instance = null;
+
+    //非同期ローディング用
+    private AsyncOperation _async;
     
     /// <summary>
     /// ゲームの状態一覧
@@ -87,15 +90,14 @@ public class GameLoopManager : MonoBehaviour
         Debug.Log("Scene Changed :"+thisScene.name);
         //Debug.Log("Scene Changed mode :"+nextScene.name);
         //シーンが遷移した後はクイックロードをする
-
-        
     }
 
     //タイトルのシーンに遷移させる関数
     void switchToTitleScene()
     {
         currentState = SceneData.GameState.TITLE;
-        SceneManager.LoadScene("Title");
+        StartCoroutine(Start("Title"));
+        //SceneManager.LoadScene("Title");
     }
 
     //街のシーンに遷移させる関数
@@ -107,7 +109,8 @@ public class GameLoopManager : MonoBehaviour
         //{
         //    QuickSaveManager.instance.quickSaveInExplore();
         //}
-        SceneManager.LoadScene("Town");
+        StartCoroutine(Start("Town_Hirono"));
+        //SceneManager.LoadScene("Town");
         //違うシーンから遷移した時はクイックセーブされたポジションを参照する
         //QuickSaveManager.instance.quickLoadInTown();
     }
@@ -121,7 +124,8 @@ public class GameLoopManager : MonoBehaviour
         //{
         //    QuickSaveManager.instance.quickSaveInTown();
         //}
-        SceneManager.LoadScene("Explore_Hirono");
+        StartCoroutine(Start("Explore_Hirono"));
+        //SceneManager.LoadScene("Explore_Hirono");
         //違うシーンから遷移した時はクイックセーブされたポジションを参照する
         //QuickSaveManager.instance.quickLoadInExplore();
     }
@@ -132,8 +136,36 @@ public class GameLoopManager : MonoBehaviour
         currentState = SceneData.GameState.DIG;
         //掘りシーンに移行する時に探検シーンでの位置を保存する
         //QuickSaveManager.instance.quickSaveInExplore();
-        SceneManager.LoadScene("Dig");
+        StartCoroutine(Start("Dig_Sakai"));
+       // SceneManager.LoadScene("Dig_Sakai");
         
+    }
+
+    void switchToLabScene()
+    {
+        currentState = SceneData.GameState.LAB;
+        StartCoroutine(Start("Lab_Hirono"));
+    }
+
+    IEnumerator Start(string sceneName)
+    {
+        yield return new WaitForSeconds(1);
+
+        //非同期でロード開始
+        _async = SceneManager.LoadSceneAsync(sceneName);
+
+        //シーン移動を許可するかどうか
+        //_async.allowSceneActivation = false;
+
+        while (!_async.isDone)
+        {
+            Debug.Log(_async.progress / 0.9f);
+            yield return null;
+        }
+        Debug.Log("SceneName = " + sceneName + " ロード完了");
+        //_async.allowSceneActivation = true;
+
+        yield return _async;
     }
 
     public void dispatch(SceneData.GameState state)
@@ -159,6 +191,9 @@ public class GameLoopManager : MonoBehaviour
                 switchToDigScene();
                 break;
 
+            case SceneData.GameState.LAB:
+                switchToLabScene();
+                break;
         }
     }
 }

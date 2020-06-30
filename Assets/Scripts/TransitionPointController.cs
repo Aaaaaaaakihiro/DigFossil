@@ -11,11 +11,18 @@ public class TransitionPointController : MonoBehaviour
     //プレイヤーがコリジョンに入ってるかどうか
     private bool isPlayerEnteringCollision = false;
 
+    private bool isPlayerEntered = false;
+
     void Update()
     {
         if (isPlayerEnteringCollision)
         {
-            GameLoopManager.instance.dispatch(_scene);
+            if (!isPlayerEntered)
+            {
+                isPlayerEntered = true;
+                Debug.Log("Playerがマップ"+_scene+"へ移動");
+                GameLoopManager.instance.dispatch(_scene);
+            }
         }
     }
 

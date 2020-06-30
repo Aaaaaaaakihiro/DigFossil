@@ -12,6 +12,7 @@ public class SceneData
         TITLE,
         TOWN,
         EXPLORE,
-        DIG
+        DIG,
+        LAB
     }
 }
