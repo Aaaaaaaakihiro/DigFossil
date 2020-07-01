@@ -10,7 +10,7 @@ public class MoveController : MonoBehaviour
 
     private static bool playerExists;
 
-    public Dictionary<string, Vector3> oldPositionData;
+    private Dictionary<string, Vector3> oldPositionData;
     private void Awake()
     {
         if (!playerExists)
@@ -23,15 +23,6 @@ public class MoveController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-    void Start()
-    {
-        //QuickSaveManager.instance.quickLoad();
-    }
-
-    public void recordOldVector()
-    {
-        
     }
 
     // Update is called once per frame

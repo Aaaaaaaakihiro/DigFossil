@@ -910,7 +910,6 @@ GameObject:
   - component: {fileID: 8995974842561434581}
   - component: {fileID: 1740667821989897119}
   - component: {fileID: 6752781922398512185}
-  - component: {fileID: 3030802734708353026}
   - component: {fileID: 7662714833901162517}
   - component: {fileID: 4578667135199190155}
   - component: {fileID: 7555138842178047814}
@@ -1021,19 +1020,6 @@ MonoBehaviour:
   _moveSpeed: 20
   _destinationPointRadius: 2
   _offset: 3
---- !u!114 &3030802734708353026
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5119339707448693342}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b5dc0352c907d47960981aead77a15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
 --- !u!114 &7662714833901162517
 MonoBehaviour:
   m_ObjectHideFlags: 0

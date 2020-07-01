@@ -7,91 +7,65 @@ public class GameLoopManager : MonoBehaviour
 {
     //staticなインスタンスを作成していつでもアクセスできるように
     public static GameLoopManager instance = null;
-
     //非同期ローディング用
     private AsyncOperation _async;
-    
-    /// <summary>
-    /// ゲームの状態一覧
-    /// </summary>
-    //public enum GameState
-    //{
-    //    TITLE,
-    //    TOWN,
-    //    EXPLORE,
-    //    DIG
-    //}
-
+    //現在のゲームシーン
     public SceneData.GameState currentState = SceneData.GameState.TITLE;
 
+    public Dictionary<string, Vector3> _oldPositionData;
     private void Awake()
     {
-        //シングルトン処理
-        //インスタンス作成時、既にインスタンスが作成されている場合はインスタンスを破壊する。
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-    }
-    void Start()
-    {
-        SceneManager.sceneLoaded += SceneLoaded;
-        SceneManager.sceneUnloaded += SceneUnloaded;
-        SceneManager.activeSceneChanged += ActiveSceneChanged;
+        _oldPositionData = new Dictionary<string, Vector3>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        //SceneLoaded,Unloaded,SceneChangedの３つのイベントをそれぞれ専用のイベントに追加
+        SceneManager.sceneUnloaded += SceneUnloaded;
+        SceneManager.activeSceneChanged += ActiveSceneChanged;
+        SceneManager.sceneLoaded += SceneLoaded;
+    }
+
+    void SceneUnloaded(Scene thisScene)
+    {
+        Debug.Log("Scene Unloaded :" + thisScene.name);
+
+        //イベの削除
+        SceneManager.sceneUnloaded -= SceneUnloaded;
+    }
+    void ActiveSceneChanged(Scene thisScene, Scene nextScene)
+    {
+        Debug.Log("Scene Changed :" + thisScene.name);
+        //イベの削除
+        SceneManager.activeSceneChanged -= ActiveSceneChanged;
     }
     void SceneLoaded(Scene nextScene, LoadSceneMode mode)
     {
         Debug.Log("Scene Loaded :"+nextScene.name);
-        //Debug.Log("Scene Loaded mode :"+mode);
 
-        //シーンが遷移する前に各状況に応じてクイックセーブをする
-        //if (SceneManager.GetActiveScene().name == "Explore" && nextScene.name == "Town")
-        //{
-        //    QuickSaveManager.instance.quickSaveInExplore();
-        //}
-        //else if (SceneManager.GetActiveScene().name == "Town" && nextScene.name == "Explore")
-        //{
-        //    QuickSaveManager.instance.quickSaveInTown();
-        //}
-        //else if(SceneManager.GetActiveScene().name == "Explore" && nextScene.name == "Dig")
-        //{
-        //    QuickSaveManager.instance.quickSaveInExplore();
-        //}
+        //シーンが切り替えられた時の処理
+        //シーン切り替え後のGameLoopManagerスクリプトを取得
+        var _gameLoopManager = GameObject.FindWithTag("GameLoopManager").GetComponent<GameLoopManager>();
+        //前のシーンのGameLoopManagerから今のシーンのGameLoopManagerにoldPositionDataのディクショナリーを引き継ぐ
+        _gameLoopManager._oldPositionData = _oldPositionData;
+        //プレイヤーを取得
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player.GetComponent<MoveController>().oldPositionData.ContainsKey(nextScene.name))
+
+        
+
+        //前のシーンでのポジションデーターがある場合はそのポジションにPlayerを持っていく
+        if (_gameLoopManager._oldPositionData.ContainsKey(nextScene.name))
         {
-            player.transform.position = player.GetComponent<MoveController>().oldPositionData[nextScene.name];
+            player.transform.position = _gameLoopManager._oldPositionData[nextScene.name];
         }
         else
         {
-            player.transform.position = new Vector3(0,1.1f,0);
+            //player.transform.position = new Vector3(0, 1.1f, 0);
         }
 
+        //イベントの削除
+        SceneManager.sceneLoaded -= SceneLoaded;
     }
-    void SceneUnloaded(Scene thisScene)
-    {
-        Debug.Log("Scene Unloaded :"+thisScene.name);
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        player.GetComponent<MoveController>().oldPositionData[SceneManager.GetActiveScene().name] = player.transform.position;
-    }
-    void ActiveSceneChanged(Scene thisScene, Scene nextScene)
-    {
-        Debug.Log("Scene Changed :"+thisScene.name);
-        //Debug.Log("Scene Changed mode :"+nextScene.name);
-        //シーンが遷移した後はクイックロードをする
-    }
-
     //タイトルのシーンに遷移させる関数
     void switchToTitleScene()
     {
@@ -172,6 +146,19 @@ public class GameLoopManager : MonoBehaviour
     {
         SceneData.GameState oldState = currentState;
         currentState = state;
+
+        //プレイヤーを取得
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        //現在のシーンの座標を記録
+        if (_oldPositionData.ContainsKey(SceneManager.GetActiveScene().name))
+        {
+            _oldPositionData[SceneManager.GetActiveScene().name] = player.transform.position;
+        }
+        else
+        {
+            _oldPositionData.Add(SceneManager.GetActiveScene().name, player.transform.position);
+        }
 
         switch (state)
         {

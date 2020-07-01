@@ -8,6 +8,7 @@ TagManager:
   - Terrain
   - NPC
   - InteractiveObject
+  - GameLoopManager
   layers:
   - Default
   - TransparentFX
