@@ -11,6 +11,8 @@ public class GameLoopManager : MonoBehaviour
     private AsyncOperation _async;
     //現在のゲームシーン
     public SceneData.GameState currentState = SceneData.GameState.TITLE;
+    //フェードイン・アウト用のゲームオブジェクト
+    private Fade _fadeScript;
 
     public Dictionary<string, Vector3> _oldPositionData;
     private void Awake()
@@ -20,6 +22,9 @@ public class GameLoopManager : MonoBehaviour
 
     private void Start()
     {
+        //fadeスクリプト
+        _fadeScript = GameObject.Find("Canvas/FadePanel").GetComponent<Fade>();
+
         //SceneLoaded,Unloaded,SceneChangedの３つのイベントをそれぞれ専用のイベントに追加
         SceneManager.sceneUnloaded += SceneUnloaded;
         SceneManager.activeSceneChanged += ActiveSceneChanged;
@@ -144,6 +149,9 @@ public class GameLoopManager : MonoBehaviour
 
     public void dispatch(SceneData.GameState state)
     {
+        //シーンロード前に画面をフェードアウト
+        _fadeScript.StartCoroutine("FadeOut");
+
         SceneData.GameState oldState = currentState;
         currentState = state;
 
